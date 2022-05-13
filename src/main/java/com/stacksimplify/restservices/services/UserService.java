@@ -5,9 +5,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.stacksimplify.restservices.entities.User;
+import com.stacksimplify.restservices.exceptions.UserExistsException;
+import com.stacksimplify.restservices.exceptions.UserNotFoundException;
 import com.stacksimplify.restservices.repositories.UserRepository;
 
 @Service
@@ -21,31 +25,50 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
-	public User createUser(User user)
+	public User createUser(User user) throws UserExistsException
 	{
+		User existingUser=userRepository.findByUsername(user.getUsername());
+	    if(existingUser!=null)
+	    {
+	    	throw new UserExistsException("user already exists");
+	    }
+		
 		return userRepository.save(user);
 		
 	}
 	
-	public Optional<User> getUserById(Long id)
+	public Optional<User> getUserById(Long id) throws UserNotFoundException
 	{
 	Optional<User> user=	userRepository.findById(id);
+	if(!user.isPresent())
+	{
+		throw new UserNotFoundException("user not found in user repo");
+	}
 	
 	return user;
 	}
 	
-	public User updateUserId(long id,User user)
+	public User updateUserId(long id,User user) throws UserNotFoundException
 	{
+		Optional<User> optionaluser=	userRepository.findById(id);
+		if(!optionaluser.isPresent())
+		{
+			throw new UserNotFoundException("user not found in user repo,provide the correct user id");
+		}
+		
 		user.setId(id);
 		return userRepository.save(user);
 	}
 
-	public void deleteUserById(Long id) {
+	public void deleteUserById(Long id) throws ResponseStatusException {
 		// TODO Auto-generated method stub
-	if(userRepository.findById(id).isPresent())
-	{
-		 userRepository.deleteById(id);
-	}
+	
+		Optional<User> optionaluser=	userRepository.findById(id);
+		if(!optionaluser.isPresent())
+		{
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"user not found in user repo,provide the correct user id");
+		}
+	 userRepository.deleteById(id);
 	}
 	
 	
