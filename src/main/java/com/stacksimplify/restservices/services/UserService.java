@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,15 +15,15 @@ import com.stacksimplify.restservices.repositories.UserRepository;
 
 @Service
 public class UserService {
- 
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	public List<User> getAllUsers()
 	{
 		return userRepository.findAll();
 	}
-	
+
 	public User createUser(User user) throws UserExistsException
 	{
 		User existingUser=userRepository.findByUsername(user.getUsername());
@@ -32,11 +31,11 @@ public class UserService {
 	    {
 	    	throw new UserExistsException("user already exists");
 	    }
-		
+
 		return userRepository.save(user);
-		
+
 	}
-	
+
 	public Optional<User> getUserById(Long id) throws UserNotFoundException
 	{
 	Optional<User> user=	userRepository.findById(id);
@@ -44,10 +43,10 @@ public class UserService {
 	{
 		throw new UserNotFoundException("user not found in user repo");
 	}
-	
+
 	return user;
 	}
-	
+
 	public User updateUserId(long id,User user) throws UserNotFoundException
 	{
 		Optional<User> optionaluser=	userRepository.findById(id);
@@ -55,14 +54,14 @@ public class UserService {
 		{
 			throw new UserNotFoundException("user not found in user repo,provide the correct user id");
 		}
-		
+
 		user.setId(id);
 		return userRepository.save(user);
 	}
 
 	public void deleteUserById(Long id) throws ResponseStatusException {
 		// TODO Auto-generated method stub
-	
+
 		Optional<User> optionaluser=	userRepository.findById(id);
 		if(!optionaluser.isPresent())
 		{
@@ -70,11 +69,11 @@ public class UserService {
 		}
 	 userRepository.deleteById(id);
 	}
-	
-	
+
+
 	public User getUserByUserName(String username)
 	{
 	return  userRepository.findByUsername(username);
 	}
-	
+
 }

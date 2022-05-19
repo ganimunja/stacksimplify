@@ -39,7 +39,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 			return new ResponseEntity<>(customErrorDetails, HttpStatus.METHOD_NOT_ALLOWED);
 
 		}
-		
+
 		// UserNameNotFoundException
 		@ExceptionHandler(UserNameNotFoundException.class)
 		public final ResponseEntity<Object> handleUserNameNotFoundException(UserNameNotFoundException ex,
@@ -60,6 +60,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 			return new ResponseEntity<>(customErrorDetails, HttpStatus.BAD_REQUEST);
 
 		}
-		
-		
+
+
 }

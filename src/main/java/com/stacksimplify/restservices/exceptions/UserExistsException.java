@@ -3,7 +3,7 @@ package com.stacksimplify.restservices.exceptions;
 public class UserExistsException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -11,6 +11,6 @@ public class UserExistsException extends Exception {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 
 }

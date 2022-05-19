@@ -28,6 +28,6 @@ public class UserDetails {
 		this.lastname = lastname;
 		this.city = city;
 	}
-	
+
 
 }
